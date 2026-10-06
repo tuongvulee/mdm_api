@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: [ :index, :show, :create ]
-      resources :devices, only: [ :index, :create ] do
+      resources :devices, only: [ :index, :create, :destroy ] do
         resource :status, only: :update, controller: "device_statuses"
       end
     end
