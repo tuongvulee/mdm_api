@@ -16,6 +16,11 @@ module Api
         render json: { data: DeviceSerializer.new(device).as_json }, status: :created
       end
 
+      def destroy
+        Devices::Destroy.call(Device.find(params[:id]))
+        head :no_content  
+      end
+
       private
 
       def device_params

@@ -80,4 +80,25 @@ RSpec.describe "Api::V1::Devices", type: :request do
       expect(response.parsed_body.dig("error", "details", "user")).to be_present
     end
   end
+
+    describe "DELETE /api/v1/devices/:id" do
+    include ActiveJob::TestHelper
+
+    let!(:device) { create(:device) }
+
+    it "deletes the device, returns 204 and enqueues a notification" do
+      expect {
+        delete "/api/v1/devices/#{device.id}"
+      }.to change(Device, :count).by(-1)
+        .and have_enqueued_job(DeviceDeletedNotificationJob)
+
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it "returns 404 when the device does not exist" do
+      delete "/api/v1/devices/0"
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
