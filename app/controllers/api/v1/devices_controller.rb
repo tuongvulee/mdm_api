@@ -18,7 +18,7 @@ module Api
 
       def destroy
         Devices::Destroy.call(Device.find(params[:id]))
-        head :no_content  
+        head :no_content
       end
 
       private
